@@ -1168,18 +1168,18 @@ public:
 
         return ss.str();
     }
-    
+
     int frek(int from, int to)
     {
         for ( auto& rule : rules ) {
-            if(rule.first.first == from && rule.first.second == to) 
+            if(rule.first.first == from && rule.first.second == to)
 	      return rule.second;
         }
-        
+
         return 0;
-      
+
     }
-    
+
     std::string printMachines() {
 
         std::stringstream ss;
@@ -1199,15 +1199,15 @@ public:
         for ( auto& mm : machines ) {
             //int max = (4*maxs[mm.first])/5;
             int max = maxs[mm.first]/10;
-	    
+
 	    ss << "[" << max << "]";
-	    
+
             mm.second.erase(std::remove_if (
                 mm.second.begin(), mm.second.end(),
             [=] ( int & n ) {
                 return frek(mm.first, n) < max;
             } ), mm.second.end() );
-	    	    
+
         }
         ss << multTos ( machines );
 
@@ -1268,18 +1268,26 @@ public:
     }
 
     std::string printSortedRules() {
+        using rules_tuple = std::tuple<int,int,int>;
 
-        std::vector<std::pair<std::pair<int, int>, int>> tmp;
+	      std::vector<rules_tuple> tmp;
+
 
         for ( auto& rule : rules ) {
-            std::pair<std::pair<int, int>, int> p {{rule.first.first, rule.first.second}, rule.second};
-            tmp.push_back ( p );
+            //rule.first.first
+            //rule.first.second
+            //rule.second
+	          rules_tuple tpl;
+	          std::get<0>(tpl) = rule.first.first;
+	          std::get<1>(tpl) = rule.first.second;
+ 	          std::get<2>(tpl) = rule.second;
+            tmp.push_back ( tpl );
         }
 
         std::sort (
             std::begin ( tmp ), std::end ( tmp ),
         [=] ( auto&& t1, auto&&t2 ) {
-            return t1.second > t2.second;
+            return std::get<2>(t1) > std::get<2>(t2);
         }
         );
 
@@ -1288,8 +1296,7 @@ public:
         ss << tmp.size();
 
         for ( auto& rule : tmp ) {
-            //ss << ", " <<rule.first.first <<","  << rule.first.second << "(" << rule.second<< ") ";
-            ss << ", " <<rule.first.first <<", "  << rule.first.second;
+            ss << ", " <<std::get<0>(rule) <<", " << std::get<1>(rule);
 
         }
         return ss.str();
