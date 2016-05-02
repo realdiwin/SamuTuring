@@ -2,6 +2,7 @@
 #define SamuQl_H
 
 /**
+ *	Fixing GitHub Graph "bug".
  * @brief NAHSHON QL from https://github.com/nbatfai/nahshon
  *
  * @file ql.hpp
